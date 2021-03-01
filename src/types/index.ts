@@ -1,4 +1,5 @@
 export type {
+  Order,
   OrderBookSubscribeEvent,
   OrderBookSnapshotEvent,
   OrderBookUpdateEvent,

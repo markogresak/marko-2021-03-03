@@ -1,6 +1,7 @@
 type Price = number;
 type Size = number;
-type Order = [Price, Size];
+
+export type Order = [Price, Size];
 
 export interface OrderBookSubscribeEvent {
   event: 'subscribed';
