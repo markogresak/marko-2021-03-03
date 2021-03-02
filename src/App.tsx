@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import React, { useCallback, useState } from 'react';
 import { XBT_USD } from './api';
-import { OrderBook } from './components';
 import useVisibility from './lib/useVisibility';
+import { OrderBook } from './components';
 
 const App = () => {
   const [isError, setIsError] = useState<boolean>(false);

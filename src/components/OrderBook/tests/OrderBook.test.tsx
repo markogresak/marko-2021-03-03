@@ -1,13 +1,13 @@
 import { render, act } from '@testing-library/react';
 import WS from 'jest-websocket-mock';
+import { Order } from '../../../types';
 import { XBT_USD } from '../../../api';
 import { FEED_NAME, WS_URL } from '../../../api/constants';
+import computeOrderBookTotal from '../../../lib/computeOrderBookTotal';
 import OrderBook from '../OrderBook';
 import subscribedEvent from './ws-subscribed-event.json';
 import snapshotEvent from './ws-snapshot-event.json';
 import updateEvent from './ws-update-event.json';
-import { Order } from '../../../types';
-import computeOrderBookTotal from '../../../lib/computeOrderBookTotal';
 import {
   snapshotAsks,
   snapshotBids,
