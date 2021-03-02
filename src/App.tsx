@@ -2,9 +2,11 @@ import styled from '@emotion/styled';
 import React, { useCallback, useState } from 'react';
 import { XBT_USD } from './api';
 import { OrderBook } from './components';
+import useVisibility from './lib/useVisibility';
 
 const App = () => {
   const [isError, setIsError] = useState<boolean>(false);
+  const isVisible = useVisibility();
 
   const handleError = useCallback((event: Event) => {
     console.error(event);
@@ -13,7 +15,9 @@ const App = () => {
 
   return (
     <Container>
-      {!isError && <OrderBook onError={handleError} productId={XBT_USD} />}
+      {!isError && isVisible && (
+        <OrderBook onError={handleError} productId={XBT_USD} />
+      )}
       {isError && (
         <ErrorContainer>
           <p>An error occurred</p>
