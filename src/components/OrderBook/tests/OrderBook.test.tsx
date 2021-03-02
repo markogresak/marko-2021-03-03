@@ -92,7 +92,7 @@ const delay = (ms: number) =>
   });
 
 const parseGridValue = (value: string): number =>
-  parseFloat(value.replaceAll(',', ''));
+  parseFloat(value.replace(/,/g, ''));
 
 function getGridData(grid: HTMLElement): GridData {
   const gridData: GridData = [];
