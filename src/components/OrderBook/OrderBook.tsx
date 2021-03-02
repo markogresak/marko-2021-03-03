@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from '@emotion/styled';
 import useSubscribeToOrderBook from '../../api/useSubscribeToOrderBook';
 import productIdToName from '../../lib/productIdToName';
