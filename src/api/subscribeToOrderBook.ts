@@ -32,6 +32,10 @@ export function subscribeToOrderBook({
   let isHandshakeDone: boolean;
 
   const getEventData = (event: MessageEvent<string>): EventData | undefined => {
+    if (!event.data) {
+      return undefined;
+    }
+
     try {
       return JSON.parse(event.data);
     } catch (error) {
