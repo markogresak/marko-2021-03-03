@@ -1,9 +1,11 @@
 import { Order } from '../types';
 
-const computeOrderBookTotal = (
-  orderBook: Order[],
-  [orderPrice]: Order,
-): number => {
+const computeOrderBookTotal = (orderBook: Order[], order?: Order): number => {
+  if (!order) {
+    return 0;
+  }
+
+  const [orderPrice] = order;
   const orderIndex = orderBook.findIndex((order) => order[0] === orderPrice);
 
   if (orderIndex === -1) {

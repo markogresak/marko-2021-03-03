@@ -47,7 +47,7 @@ const useSubscribeToOrderBook = (productId: string): State => {
 
   return {
     asks,
-    bids,
+    bids: [...bids].reverse(),
     error,
     isLoading,
   };

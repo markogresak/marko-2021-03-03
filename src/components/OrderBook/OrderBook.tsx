@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import useSubscribeToOrderBook from '../../api/useSubscribeToOrderBook';
 import computeOrderBookTotal from '../../lib/computeOrderBookTotal';
 import Container from './Container';
-import Grid from './Grid';
+import BaseGrid from './Grid';
 import Header from './Header';
 import Row from './Row';
 import Title from './Title';
@@ -16,9 +16,11 @@ interface Props {
 
 const OrderBook = ({ ordersCount = 10, productId }: Props) => {
   const orderBook = useSubscribeToOrderBook(productId);
-  const asks = orderBook.asks.slice(0, ordersCount);
-  const bids = orderBook.bids.reverse().slice(0, ordersCount);
+  const asks = orderBook.asks;
+  const bids = orderBook.bids;
   const reversedAsks = [...asks].reverse();
+  const asksTotal = computeOrderBookTotal(reversedAsks, asks[0]);
+  const bidsTotal = computeOrderBookTotal(bids, bids[bids.length - 1]);
 
   useEffect(() => {
     if (orderBook.error) {
@@ -34,23 +36,25 @@ const OrderBook = ({ ordersCount = 10, productId }: Props) => {
         <>
           <AsksGrid>
             <Header />
-            {asks.map(([price, size]) => (
+            {asks.slice(0, ordersCount).map(([price, size]) => (
               <Row
                 key={price}
                 price={price}
                 size={size}
                 total={computeOrderBookTotal(reversedAsks, [price, size])}
+                totalSum={asksTotal}
               />
             ))}
           </AsksGrid>
 
           <BidsGrid>
-            {bids.map(([price, size]) => (
+            {bids.slice(-ordersCount).map(([price, size]) => (
               <Row
                 key={price}
                 price={price}
                 size={size}
                 total={computeOrderBookTotal(bids, [price, size])}
+                totalSum={bidsTotal}
               />
             ))}
           </BidsGrid>
@@ -60,13 +64,19 @@ const OrderBook = ({ ordersCount = 10, productId }: Props) => {
   );
 };
 
+const Grid = styled(BaseGrid)`
+  --grid-column-gap: 8px;
+`;
+
 const AsksGrid = styled(Grid)`
   margin-bottom: 16px;
-  --fill-color: var(--asks-color);
+  --text-color: var(--asks-color);
+  --row-background: var(--asks-bg);
 `;
 
 const BidsGrid = styled(Grid)`
-  --fill-color: var(--bids-color);
+  --text-color: var(--bids-color);
+  --row-background: var(--bids-bg);
 `;
 
 export default OrderBook;

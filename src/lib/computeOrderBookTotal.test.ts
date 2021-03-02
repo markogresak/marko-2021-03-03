@@ -51,6 +51,12 @@ describe('lib/computeOrderBookTotal', () => {
 
     expect(computeOrderBookTotal(orderBook, unknownOrder)).toBe(expected);
   });
+
+  it('should return 0 when the order is not provided', () => {
+    const expected = 0;
+
+    expect(computeOrderBookTotal(orderBook)).toBe(expected);
+  });
 });
 
 describe('lib/computeOrderBookTotal (reversed orderBook)', () => {
