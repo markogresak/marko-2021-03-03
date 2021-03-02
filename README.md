@@ -2,6 +2,11 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+It's deployed at https://markogresak.github.io/marko-2021-03-03/.
+
+Or you can run it locally. First, run `yarn install` and refer to the Available
+Scripts section for information on how to run the app or tests.
+
 ## Available Scripts
 
 In the project directory, you can run:
