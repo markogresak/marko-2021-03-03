@@ -2,6 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import useSubscribeToOrderBook from '../../api/useSubscribeToOrderBook';
 import productIdToName from '../../lib/productIdToName';
+import getTestProps from '../../lib/getTestProps';
 import BaseLoader from '../Loader';
 import Container from './Container';
 import BaseGrid from './Grid';
@@ -31,13 +32,13 @@ const OrderBook = ({ onError, ordersCount = 10, productId }: Props) => {
       )}
       {!isLoading && (
         <>
-          <AsksGrid>
+          <AsksGrid {...getTestProps('asks-grid')}>
             <Header />
             <GridRows orders={asks.slice(0, ordersCount)} reversedTotal />
           </AsksGrid>
 
-          <BidsGrid>
-            <GridRows orders={bids.slice(-ordersCount)} />
+          <BidsGrid {...getTestProps('bids-grid')}>
+            <GridRows orders={bids.slice(0, ordersCount)} />
           </BidsGrid>
         </>
       )}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useRafLoop, useUpdate } from 'react-use';
+import sortByPrice from '../lib/sortByPrice';
 import updateOrder from '../lib/updateOrder';
 import { Order } from '../types';
 import { isOrderBookUpdateEvent, isSnapshotEvent } from '../types/lib';
@@ -30,8 +31,8 @@ const useSubscribeToOrderBook = ({ onError, productId }: Parameters): State => {
       onData: (data) => {
         if (isSnapshotEvent(data)) {
           setIsLoading(false);
-          asks.current = data.asks;
-          bids.current = data.bids;
+          asks.current = sortByPrice(data.asks);
+          bids.current = sortByPrice(data.bids);
         }
         if (isOrderBookUpdateEvent(data)) {
           asks.current = data.asks.reduce(
@@ -50,7 +51,7 @@ const useSubscribeToOrderBook = ({ onError, productId }: Parameters): State => {
   }, [onError, productId]);
 
   return {
-    asks: asks.current,
+    asks: [...asks.current].reverse(),
     bids: [...bids.current].reverse(),
     isLoading,
   };
