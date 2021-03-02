@@ -17,6 +17,7 @@ const GridRows = ({ orders, reversedTotal = false }: Props) => {
     <>
       {orders.map(([price, size], index) => (
         <Row
+          index={index}
           isHovered={hoveredIndex === index}
           key={price}
           onMouseOut={() => setHoveredIndex(-1)}
