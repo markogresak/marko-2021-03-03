@@ -1,8 +1,10 @@
 {
   "name": "marko-2021-03-03",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "homepage": "https://markogresak.github.io/marko-2021-03-03",
+  "license": "MIT",
+  "author": "Marko Grešak <marko@gresak.io> (https://gresak.io)",
   "dependencies": {
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
