@@ -30,7 +30,7 @@ const OrderBook = ({ ordersCount = 10, productId }: Props) => {
         <>
           <AsksGrid>
             <Header />
-            <GridRows orders={asks.slice(0, ordersCount)} />
+            <GridRows orders={asks.slice(0, ordersCount)} reversedTotal />
           </AsksGrid>
 
           <BidsGrid>
