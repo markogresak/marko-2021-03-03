@@ -1,3 +1,25 @@
+:root {
+  --font-sans: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Menlo', 'DejaVu Sans Mono',
+    'Bitstream Vera Sans Mono', Courier, monospace;
+
+  --background-color: #0c1114;
+  --color: #fff;
+
+  --card-bg: #1c2a31;
+  --card-color: #fff;
+  --card-title-color: #98a6af;
+  --card-font-size: 12px;
+
+  --asks-bg: rgba(188, 27, 49, 0.25);
+  --asks-color: #ff5a6a;
+
+  --bids-bg: rgba(6, 115, 37, 0.25);
+  --bids-color: #29baa5;
+}
+
 body {
-  font-family: 'IBM Plex Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-sans);
+  background: var(--background-color);
+  color: var(--color);
 }
