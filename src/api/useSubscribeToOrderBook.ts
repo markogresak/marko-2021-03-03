@@ -5,18 +5,21 @@ import { Order } from '../types';
 import { isOrderBookUpdateEvent, isSnapshotEvent } from '../types/lib';
 import { subscribeToOrderBook } from './subscribeToOrderBook';
 
+interface Parameters {
+  onError: (event: Event) => void;
+  productId: string;
+}
+
 interface State {
   asks: Order[];
   bids: Order[];
-  error: Event | undefined;
   isLoading: boolean;
 }
 
-const useSubscribeToOrderBook = (productId: string): State => {
+const useSubscribeToOrderBook = ({ onError, productId }: Parameters): State => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const asks = useRef<Order[]>([]);
   const bids = useRef<Order[]>([]);
-  const [error, setError] = useState<Event>();
   // PERF: using refs and requestAnimationFrame loop to optimize UI updates.
   // Before, the UI updates would get slower the longer the app is running.
   const update = useUpdate();
@@ -41,15 +44,14 @@ const useSubscribeToOrderBook = (productId: string): State => {
           );
         }
       },
-      onError: setError,
+      onError,
       productIds: [productId],
     });
-  }, [productId]);
+  }, [onError, productId]);
 
   return {
     asks: asks.current,
     bids: [...bids.current].reverse(),
-    error,
     isLoading,
   };
 };

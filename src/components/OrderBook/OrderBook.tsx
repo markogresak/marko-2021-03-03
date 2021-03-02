@@ -10,18 +10,16 @@ import Header from './Header';
 import Title from './Title';
 
 interface Props {
+  onError: (event: Event) => void;
   ordersCount?: number;
   productId: string;
 }
 
-const OrderBook = ({ ordersCount = 10, productId }: Props) => {
-  const { asks, bids, error, isLoading } = useSubscribeToOrderBook(productId);
-
-  useEffect(() => {
-    if (error) {
-      console.error(error);
-    }
-  }, [error]);
+const OrderBook = ({ onError, ordersCount = 10, productId }: Props) => {
+  const { asks, bids, isLoading } = useSubscribeToOrderBook({
+    onError,
+    productId,
+  });
 
   return (
     <Container>
