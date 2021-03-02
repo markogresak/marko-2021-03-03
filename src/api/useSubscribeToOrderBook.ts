@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useRafLoop, useUpdate } from 'react-use';
 import updateOrder from '../lib/updateOrder';
 import { Order } from '../types';
 import { isOrderBookUpdateEvent, isSnapshotEvent } from '../types/lib';
@@ -13,30 +14,30 @@ interface State {
 
 const useSubscribeToOrderBook = (productId: string): State => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [asks, setAsks] = useState<Order[]>([]);
-  const [bids, setBids] = useState<Order[]>([]);
+  const asks = useRef<Order[]>([]);
+  const bids = useRef<Order[]>([]);
   const [error, setError] = useState<Event>();
+  // PERF: using refs and requestAnimationFrame loop to optimize UI updates.
+  // Before, the UI updates would get slower the longer the app is running.
+  const update = useUpdate();
+  useRafLoop(update);
 
   useEffect(() => {
     return subscribeToOrderBook({
       onData: (data) => {
         if (isSnapshotEvent(data)) {
           setIsLoading(false);
-          setAsks(data.asks);
-          setBids(data.bids);
+          asks.current = data.asks;
+          bids.current = data.bids;
         }
         if (isOrderBookUpdateEvent(data)) {
-          setAsks((currentAsks) =>
-            data.asks.reduce(
-              (nextAsks, ask) => updateOrder(nextAsks, ask),
-              currentAsks,
-            ),
+          asks.current = data.asks.reduce(
+            (nextAsks, ask) => updateOrder(nextAsks, ask),
+            asks.current,
           );
-          setBids((currentBids) =>
-            data.bids.reduce(
-              (nextBids, bid) => updateOrder(nextBids, bid),
-              currentBids,
-            ),
+          bids.current = data.bids.reduce(
+            (nextBids, bid) => updateOrder(nextBids, bid),
+            bids.current,
           );
         }
       },
@@ -46,8 +47,8 @@ const useSubscribeToOrderBook = (productId: string): State => {
   }, [productId]);
 
   return {
-    asks,
-    bids: [...bids].reverse(),
+    asks: asks.current,
+    bids: [...bids.current].reverse(),
     error,
     isLoading,
   };
