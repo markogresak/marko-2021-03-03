@@ -1,4 +1,4 @@
-# Marko's challenge on 2021-03-03
+# Marko's challenge on 2021-03-03 ![Node.js CI](https://github.com/markogresak/marko-2021-03-03/workflows/Node.js%20CI/badge.svg)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
