@@ -3,14 +3,15 @@ import useSubscribeToOrderBook from '../api/useSubscribeToOrderBook';
 import computeOrderBookTotal from '../lib/computeOrderBookTotal';
 
 interface Props {
+  ordersCount?: number;
   productId: string;
 }
 
-const OrderBook = ({ productId }: Props) => {
+const OrderBook = ({ ordersCount = 10, productId }: Props) => {
   const orderBook = useSubscribeToOrderBook(productId);
-  const asks = orderBook.asks.slice(0, 10);
+  const asks = orderBook.asks.slice(0, ordersCount);
   const reversedAsks = [...asks].reverse();
-  const bids = orderBook.bids.reverse().slice(0, 10);
+  const bids = orderBook.bids.reverse().slice(0, ordersCount);
 
   useEffect(() => {
     if (orderBook.error) {
