@@ -4,9 +4,9 @@ import {
   OrderBookSubscribeEvent,
 } from '../types';
 import {
+  isOrderBookSnapshotEvent,
+  isOrderBookSubscribeEvent,
   isOrderBookUpdateEvent,
-  isSnapshotEvent,
-  isSubscribeEvent,
 } from '../types/lib';
 import { FEED_NAME, WS_URL } from './constants';
 
@@ -61,7 +61,7 @@ export function subscribeToOrderBook({
       return;
     }
 
-    if (isSubscribeEvent(eventData)) {
+    if (isOrderBookSubscribeEvent(eventData)) {
       isHandshakeDone = isValidSubscribeEvent(eventData, productIds);
       if (!isHandshakeDone) {
         dispatchError(ws, new Error('OrderBook handshake failed'));
@@ -70,7 +70,7 @@ export function subscribeToOrderBook({
 
     if (
       isHandshakeDone &&
-      (isSnapshotEvent(eventData) || isOrderBookUpdateEvent(eventData))
+      (isOrderBookSnapshotEvent(eventData) || isOrderBookUpdateEvent(eventData))
     ) {
       onData(eventData);
     }

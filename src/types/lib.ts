@@ -4,12 +4,14 @@ import {
   OrderBookSubscribeEvent,
 } from './OrderBookData';
 
-export const isSubscribeEvent = (
+export const isOrderBookSubscribeEvent = (
   event: any,
 ): event is OrderBookSubscribeEvent =>
   typeof event === 'object' && event.event === 'subscribed';
 
-export const isSnapshotEvent = (event: any): event is OrderBookSnapshotEvent =>
+export const isOrderBookSnapshotEvent = (
+  event: any,
+): event is OrderBookSnapshotEvent =>
   typeof event === 'object' &&
   typeof event.numLevels === 'number' &&
   typeof event.feed === 'string' &&

@@ -3,7 +3,7 @@ import { useRafLoop, useUpdate } from 'react-use';
 import sortByPrice from '../lib/sortByPrice';
 import updateOrder from '../lib/updateOrder';
 import { Order } from '../types';
-import { isOrderBookUpdateEvent, isSnapshotEvent } from '../types/lib';
+import { isOrderBookSnapshotEvent, isOrderBookUpdateEvent } from '../types/lib';
 import { subscribeToOrderBook } from './subscribeToOrderBook';
 
 interface Parameters {
@@ -29,7 +29,7 @@ const useSubscribeToOrderBook = ({ onError, productId }: Parameters): State => {
   useEffect(() => {
     return subscribeToOrderBook({
       onData: (data) => {
-        if (isSnapshotEvent(data)) {
+        if (isOrderBookSnapshotEvent(data)) {
           setIsLoading(false);
           asks.current = sortByPrice(data.asks);
           bids.current = sortByPrice(data.bids);
