@@ -19,52 +19,71 @@ type GridData = [number, number, number][];
 
 const onError = jest.fn();
 
-test('OrderBook', async () => {
-  const ws = new WS(WS_URL);
+let ws: WS;
+beforeEach(() => {
+  ws = new WS(WS_URL);
+  onError.mockClear();
+});
+afterEach(() => {
+  WS.clean();
+});
 
+describe('OrderBook', () => {
   const productId = XBT_USD;
   const ordersCount = 10;
 
-  const { getByTestId, getByAltText } = render(
-    <OrderBook
-      onError={onError}
-      ordersCount={ordersCount}
-      productId={productId}
-    />,
-  );
-  expect(getByAltText('Loading...')).toBeInTheDocument();
+  const mountComponent = () =>
+    render(
+      <OrderBook
+        onError={onError}
+        ordersCount={ordersCount}
+        productId={productId}
+      />,
+    );
 
-  await ws.connected;
-  await expect(ws).toReceiveMessage(
-    JSON.stringify({
-      event: 'subscribe',
-      feed: FEED_NAME,
-      product_ids: [productId],
-    }),
-  );
-
-  act(() => {
-    ws.send(JSON.stringify(subscribedEvent));
+  it('should show a loader on initial mount', () => {
+    const { getByAltText } = mountComponent();
+    expect(getByAltText('Loading...')).toBeInTheDocument();
   });
 
-  // Should still show loading until receiving the data
-  expect(getByAltText('Loading...')).toBeInTheDocument();
-
-  act(() => {
-    ws.send(JSON.stringify(snapshotEvent));
+  it('should send a subscribe message via WebSocket', async () => {
+    mountComponent();
+    await ws.connected;
+    await expect(ws).toReceiveMessage(
+      JSON.stringify({
+        event: 'subscribe',
+        feed: FEED_NAME,
+        product_ids: [productId],
+      }),
+    );
   });
 
-  assertAsksGrid(getByTestId('asks-grid'), snapshotAsks);
-  assertBidsGrid(getByTestId('bids-grid'), snapshotBids);
-
-  await act(async () => {
-    ws.send(JSON.stringify(updateEvent));
-    // Wait a bit to process the update, otherwise the assertions fail.
-    await delay(10);
+  it('should show the data after receiving subscription confirmation and snapshot data', () => {
+    const { getByTestId } = mountComponent();
+    act(() => {
+      ws.send(JSON.stringify(subscribedEvent));
+      ws.send(JSON.stringify(snapshotEvent));
+    });
+    assertAsksGrid(getByTestId('asks-grid'), snapshotAsks);
+    assertBidsGrid(getByTestId('bids-grid'), snapshotBids);
   });
 
-  assertAsksGrid(getByTestId('asks-grid'), updatedAsks);
-  assertBidsGrid(getByTestId('bids-grid'), updatedBids);
+  it('should update the grid after receiving an update event', async () => {
+    const { getByTestId } = mountComponent();
+    act(() => {
+      ws.send(JSON.stringify(subscribedEvent));
+      ws.send(JSON.stringify(snapshotEvent));
+    });
+
+    await act(async () => {
+      ws.send(JSON.stringify(updateEvent));
+      // Wait a bit to process the update, otherwise the assertions fail.
+      await delay(10);
+    });
+
+    assertAsksGrid(getByTestId('asks-grid'), updatedAsks);
+    assertBidsGrid(getByTestId('bids-grid'), updatedBids);
+  });
 });
 
 const delay = (ms: number) =>
