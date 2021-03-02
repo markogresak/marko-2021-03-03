@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import useSubscribeToOrderBook from '../../api/useSubscribeToOrderBook';
 import productIdToName from '../../lib/productIdToName';
+import BaseLoader from '../Loader';
 import Container from './Container';
 import BaseGrid from './Grid';
 import GridRows from './GridRows';
@@ -25,7 +26,11 @@ const OrderBook = ({ ordersCount = 10, productId }: Props) => {
   return (
     <Container>
       <Title>Orderbook ({productIdToName(productId)})</Title>
-      {isLoading && 'Loading...'}
+      {isLoading && (
+        <LoaderContainer>
+          <Loader />
+        </LoaderContainer>
+      )}
       {!isLoading && (
         <>
           <AsksGrid>
@@ -55,6 +60,17 @@ const AsksGrid = styled(Grid)`
 const BidsGrid = styled(Grid)`
   --text-color: var(--bids-color);
   --row-background: var(--bids-bg);
+`;
+
+const LoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Loader = styled(BaseLoader)`
+  width: 50px;
+  height: 50px;
 `;
 
 export default OrderBook;
