@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
+import styled from '@emotion/styled';
 import useSubscribeToOrderBook from '../../api/useSubscribeToOrderBook';
-import computeOrderBookTotal from '../../lib/computeOrderBookTotal';
+import productIdToName from '../../lib/productIdToName';
 import Container from './Container';
 import BaseGrid from './Grid';
+import GridRows from './GridRows';
 import Header from './Header';
-import Row from './Row';
 import Title from './Title';
-import productIdToName from '../../lib/productIdToName';
-import styled from '@emotion/styled';
 
 interface Props {
   ordersCount?: number;
@@ -15,48 +14,27 @@ interface Props {
 }
 
 const OrderBook = ({ ordersCount = 10, productId }: Props) => {
-  const orderBook = useSubscribeToOrderBook(productId);
-  const asks = orderBook.asks;
-  const bids = orderBook.bids;
-  const reversedAsks = [...asks].reverse();
-  const asksTotal = computeOrderBookTotal(reversedAsks, asks[0]);
-  const bidsTotal = computeOrderBookTotal(bids, bids[bids.length - 1]);
+  const { asks, bids, error, isLoading } = useSubscribeToOrderBook(productId);
 
   useEffect(() => {
-    if (orderBook.error) {
-      console.error(orderBook.error);
+    if (error) {
+      console.error(error);
     }
-  }, [orderBook.error]);
+  }, [error]);
 
   return (
     <Container>
       <Title>Orderbook ({productIdToName(productId)})</Title>
-      {orderBook.isLoading && 'Loading...'}
-      {!orderBook.isLoading && (
+      {isLoading && 'Loading...'}
+      {!isLoading && (
         <>
           <AsksGrid>
             <Header />
-            {asks.slice(0, ordersCount).map(([price, size]) => (
-              <Row
-                key={price}
-                price={price}
-                size={size}
-                total={computeOrderBookTotal(reversedAsks, [price, size])}
-                totalSum={asksTotal}
-              />
-            ))}
+            <GridRows orders={asks.slice(0, ordersCount)} />
           </AsksGrid>
 
           <BidsGrid>
-            {bids.slice(-ordersCount).map(([price, size]) => (
-              <Row
-                key={price}
-                price={price}
-                size={size}
-                total={computeOrderBookTotal(bids, [price, size])}
-                totalSum={bidsTotal}
-              />
-            ))}
+            <GridRows orders={bids.slice(-ordersCount)} />
           </BidsGrid>
         </>
       )}
