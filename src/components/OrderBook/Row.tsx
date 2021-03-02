@@ -1,4 +1,5 @@
 import React, { CSSProperties, MouseEventHandler } from 'react';
+import formatNumber from '../../lib/formatNumber';
 import RowCell from './RowCell';
 
 interface Props {
@@ -33,13 +34,13 @@ const Row = ({
         // TODO: figure out how to compute the correct percent value
         style={{ '--percent': percent } as CSSProperties}
       >
-        {price.toLocaleString()}
+        {formatNumber(price, { digits: 2 })}
       </RowCell>
       <RowCell onMouseOut={onMouseOut} onMouseOver={onMouseOver}>
-        {size.toLocaleString()}
+        {formatNumber(size, { digits: 0 })}
       </RowCell>
       <RowCell onMouseOut={onMouseOut} onMouseOver={onMouseOver}>
-        {total.toLocaleString()}
+        {formatNumber(total, { digits: 0 })}
       </RowCell>
     </>
   );
