@@ -4,6 +4,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 It's deployed at https://markogresak.github.io/marko-2021-03-03/.
 
+Tested on macOS 11.2 in the latest versions of Firefox, Chrome and Safari browsers.
+
 Or you can run it locally. First, run `yarn install` and refer to the Available
 Scripts section for information on how to run the app or tests.
 
