@@ -82,7 +82,7 @@ If it's a problem with network-bound code, I use a tool to measure network reque
 
 The idea is the same: measure first, then optimize. I should also mention that I try not to optimize before there's a clear performance problem.
 
-I used this approach to optimize slow updates in this example app. It turned out the WebSocket updates were too fast and triggering React state updates for every change caused the app to become stuck in endless updates (fixed by b1f6002db60c3e41f85d34e185ff27402b5b8b8e). Another problem was too many `@emotion` style updates (fixed by 36e4183edd0051e98a30269cdd44cdcfdb4849f6).
+I used this approach to optimize slow updates in this example app. It turned out the WebSocket updates were too fast and triggering React state updates for every change caused the app to become stuck in endless updates (fixed by [b1f6002](https://github.com/markogresak/marko-2021-03-03/commit/b1f6002db60c3e41f85d34e185ff27402b5b8b8e)). Another problem was too many `@emotion` style updates (fixed by [36e4183](https://github.com/markogresak/marko-2021-03-03/commit/36e4183edd0051e98a30269cdd44cdcfdb4849f6)).
 
 ## 5. Can you describe common security concerns to consider for a frontend developer?
 
