@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import computeOrderBookTotal from '../../lib/computeOrderBookTotal';
 import { Order } from '../../types';
 import Row from './Row';
@@ -10,10 +10,7 @@ interface Props {
 
 const GridRows = ({ orders, reversedTotal = false }: Props) => {
   const [hoveredIndex, setHoveredIndex] = useState<number>(-1);
-  const ordersForTotal = useMemo(
-    () => (reversedTotal ? [...orders].reverse() : orders),
-    [orders, reversedTotal],
-  );
+  const ordersForTotal = reversedTotal ? [...orders].reverse() : orders;
   const totalSum = computeOrderBookTotal(orders, orders[orders.length - 1]);
 
   return (
